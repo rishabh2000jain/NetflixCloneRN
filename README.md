@@ -80,3 +80,4 @@ To learn more about React Native, take a look at the following resources:
 
 
 Figma Link = https://www.figma.com/file/4u64RFL3IYr71hWCnXP0Qg/Netflix-Clone-Mobile-App-Ui-(Community)?type=design&node-id=1-112&mode=design
+Onboarding Figma = https://www.figma.com/design/MsaO1sCQxSRWDGGrURS9v4/Netflix-Onboarding-Contents-(Community)?node-id=0-1&t=BFNnCAMXJClsSZLs-0
