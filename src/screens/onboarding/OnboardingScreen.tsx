@@ -2,18 +2,22 @@ import { TouchableOpacity, Image, StyleSheet, Text, View, Dimensions, ScrollView
 import React, { FunctionComponent, useRef, useState } from 'react';
 import OnboardingPageComponent from './OnboardingPageComponent';
 import StorageKeys,{setValue,getValue} from '../../util/AppDBStorage'
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../util/NavigationParamList';
 
-const OnboardingScreen = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'Onboarding'>;
+
+const OnboardingScreen = ({navigation}:Props) => {
 
   const [currentPage, setCurrentPage] = useState(0);
-  const viewPager = useRef(null);
+  const viewPager = useRef<ScrollView>(null);
   const screenWidth = Dimensions.get('window').width;
   const onNextButtonTap = () => {
     if (currentPage > 2) {
       setValue({key:StorageKeys.onboardingShown,value:'true'});
+      navigation.replace('Login');
       return;
     }
-  
     viewPager.current?.scrollTo({ x: (currentPage + 1) * screenWidth, y: 0, animated: true });
   };
 
