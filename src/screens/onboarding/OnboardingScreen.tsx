@@ -1,6 +1,7 @@
 import { TouchableOpacity, Image, StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
 import React, { FunctionComponent, useRef, useState } from 'react';
 import OnboardingPageComponent from './OnboardingPageComponent';
+import StorageKeys,{setValue,getValue} from '../../util/AppDBStorage'
 
 const OnboardingScreen = () => {
 
@@ -9,14 +10,17 @@ const OnboardingScreen = () => {
   const screenWidth = Dimensions.get('window').width;
   const onNextButtonTap = () => {
     if (currentPage > 2) {
+      setValue({key:StorageKeys.onboardingShown,value:'true'});
       return;
     }
+  
     viewPager.current?.scrollTo({ x: (currentPage + 1) * screenWidth, y: 0, animated: true });
   };
 
   const showBgImage = () => {
     return currentPage == 3;
   }
+  
   return (
     <View style={styles.container}>
       {showBgImage() ?
@@ -43,7 +47,7 @@ const OnboardingScreen = () => {
           ref={viewPager}
           onScroll={(e) => {
             const offsetX = e.nativeEvent.contentOffset.x;
-            setCurrentPage(Math.floor(offsetX / screenWidth));
+            setCurrentPage(Math.ceil(offsetX / screenWidth));
           }}>
           <OnboardingPageComponent 
             image={require('../../images/Onboarding1.png')}

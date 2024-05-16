@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "361672344306",
+    "project_id": "rninstaclone-3b49b",
+    "storage_bucket": "rninstaclone-3b49b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361672344306:android:c4695642dab64e5705866b",
+        "android_client_info": {
+          "package_name": "com.neflixapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnDj8UpChcBdDZ0hVsFSlXr1zh828dgDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
