@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput,ActivityIndicator, Alert} from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity,TextInput,ActivityIndicator, Alert, Keyboard} from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -47,8 +47,9 @@ export default function LoginScreen({navigation}:Props) {
                 />
             </View>
             <TouchableOpacity style={styles.signinButton} onPress={async()=>{
+                Keyboard.dismiss();
                 if(!validator.isEmail(email)){
-                    Toast.show('Please enter a valid email',Toast.SHORT);
+                    Toast.show('Please enter a valid email',Toast.SHORT,{backgroundColor:'white',textColor:'black'});
                     return;
                 }
                 if(!validator.isStrongPassword(password,{minLength:8})){
@@ -57,7 +58,7 @@ export default function LoginScreen({navigation}:Props) {
                 }
                 setLoading(true);
                 try{
-                    const users = await firestore().collection('Users').where('email','==',email).get();
+                    const users = await firestore().collection('Users').where('email','==',email.toLocaleLowerCase()).get();
                     let creds:FirebaseAuthTypes.UserCredential;
                     if(users.empty){
                         creds = await auth().createUserWithEmailAndPassword(email,password);
@@ -115,10 +116,8 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        alignItems: 'center'
-    },
-    headerIcon: {
-        marginLeft: 8,
+        alignItems: 'center',
+        paddingTop: 12,  
     },
     headerImage: {
         height: 31,
@@ -132,6 +131,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:17,
         paddingVertical:8,
         borderRadius:11,
+        justifyContent:'space-between'
     },
     inputTextTitle:{
         color: '#FDF7F7',

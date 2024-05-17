@@ -13,6 +13,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
 import HomeScreen from './screens/home/HomeScreen';
+import { Platform } from 'react-native';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -46,10 +47,18 @@ const appStateReducer = (state: AppState, action: AppActions) => {
 const headerParams = {
   headerShown: false,
 };
-const credentials = {
+const credentials = Platform.OS =='android'? {
   clientId: '',
   appId: '1:361672344306:android:c4695642dab64e5705866b',
   apiKey: 'AIzaSyAnDj8UpChcBdDZ0hVsFSlXr1zh828dgDs',
+  databaseURL: '',
+  storageBucket: 'rninstaclone-3b49b.appspot.com',
+  messagingSenderId: '',
+  projectId: 'rninstaclone-3b49b',
+}:{
+  clientId: '',
+  appId: '1:361672344306:ios:a84c295e7fb3819805866b',
+  apiKey: 'AIzaSyAAsh5f6gRh_qlCpsOBJqxbveut02JSe_g',
   databaseURL: '',
   storageBucket: 'rninstaclone-3b49b.appspot.com',
   messagingSenderId: '',
@@ -68,18 +77,25 @@ function App(): React.JSX.Element {
   useEffect(() => {
     const fetchAppState = async () => {
       if(firebase.apps.length==0){
-        await firebase.initializeApp(credentials).catch((e)=>{});
-      }
+        await firebase.initializeApp(credentials).catch((e)=>{
+          console.log(e);
+        });
+      }      
       dispatch({ type: 'loading' });
       const shown = await getValue(StorageKeys.onboardingShown, 'false');
       dispatch({ type: 'updateAppState', showOnboarding: shown == 'false', user: auth().currentUser });
-      auth().onAuthStateChanged((user)=>{
-        onAuthStateChanged(user);
-      });
       SplashScreen.hide();
     };
     fetchAppState();
   }, []);
+
+
+  useEffect(()=>{
+    const subs = auth().onAuthStateChanged((user)=>{
+      onAuthStateChanged(user);
+    });
+    return subs;
+  },[state.user]);
 
   const getInitialRoute = ()=>{
     if(state.user){
