@@ -14,6 +14,8 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
 import HomeScreen from './screens/home/HomeScreen';
 import { Platform } from 'react-native';
+import SearchScreen from './screens/search/SearchScreen';
+import {DebounceContext} from './util/Debounce'
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -24,17 +26,17 @@ interface AppState {
   user?: FirebaseAuthTypes.User | null;
 };
 
-type AppActions = | { type: 'updateAppState'; user: FirebaseAuthTypes.User | null, showOnboarding: boolean} | { type: 'loading' } | { type: 'userAuthChanged',user: FirebaseAuthTypes.User | null };
+type AppActions = | { type: 'updateAppState'; user: FirebaseAuthTypes.User | null, showOnboarding: boolean } | { type: 'loading' } | { type: 'userAuthChanged', user: FirebaseAuthTypes.User | null };
 
-const appInitialState: AppState = { loading: false, showOnboarding: false ,};
+const appInitialState: AppState = { loading: false, showOnboarding: false, };
 
 const appStateReducer = (state: AppState, action: AppActions) => {
   switch (action.type) {
     case 'updateAppState': {
-      return { loading: false, showOnboarding: action.showOnboarding,user:action.user};
+      return { loading: false, showOnboarding: action.showOnboarding, user: action.user };
     };
     case 'userAuthChanged': {
-      return { ...state, user:action.user};
+      return { ...state, user: action.user };
     }
     case 'loading': {
       return { loading: false, showOnboarding: false };
@@ -46,8 +48,10 @@ const appStateReducer = (state: AppState, action: AppActions) => {
 
 const headerParams = {
   headerShown: false,
+  statusBarTranslucent: true,
+  statusBarColor: 'transparent'
 };
-const credentials = Platform.OS =='android'? {
+const credentials = Platform.OS == 'android' ? {
   clientId: '',
   appId: '1:361672344306:android:c4695642dab64e5705866b',
   apiKey: 'AIzaSyAnDj8UpChcBdDZ0hVsFSlXr1zh828dgDs',
@@ -55,7 +59,7 @@ const credentials = Platform.OS =='android'? {
   storageBucket: 'rninstaclone-3b49b.appspot.com',
   messagingSenderId: '',
   projectId: 'rninstaclone-3b49b',
-}:{
+} : {
   clientId: '',
   appId: '1:361672344306:ios:a84c295e7fb3819805866b',
   apiKey: 'AIzaSyAAsh5f6gRh_qlCpsOBJqxbveut02JSe_g',
@@ -71,18 +75,18 @@ function App(): React.JSX.Element {
     appInitialState,
     () => appInitialState,
   );
-  const onAuthStateChanged = (user:FirebaseAuthTypes.User|null) => {
+  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
     dispatch({ type: 'userAuthChanged', user: auth().currentUser });
   }
   useEffect(() => {
     const fetchAppState = async () => {
-      if(firebase.apps.length==0){
-        await firebase.initializeApp(credentials).catch((e)=>{
+      if (firebase.apps.length == 0) {
+        await firebase.initializeApp(credentials).catch((e) => {
           console.log(e);
         });
-      }      
+      }
       dispatch({ type: 'loading' });
-      const shown = await getValue(StorageKeys.onboardingShown, 'false');
+      const shown = await getValue(StorageKeys.onboardingShown, 'true');
       dispatch({ type: 'updateAppState', showOnboarding: shown == 'false', user: auth().currentUser });
       SplashScreen.hide();
     };
@@ -90,21 +94,21 @@ function App(): React.JSX.Element {
   }, []);
 
 
-  useEffect(()=>{
-    const subs = auth().onAuthStateChanged((user)=>{
+  useEffect(() => {
+    const subs = auth().onAuthStateChanged((user) => {
       onAuthStateChanged(user);
     });
     return subs;
-  },[state.user]);
+  }, [state.user]);
 
-  const getInitialRoute = ()=>{
-    if(state.user){
+  const getInitialRoute = () => {
+    if (state.user) {
       return ScreenRouteNames.Home
     }
-    if(state.showOnboarding){
-      return ScreenRouteNames.Onboarding; 
+    if (state.showOnboarding) {
+      return ScreenRouteNames.Onboarding;
     }
-    return ScreenRouteNames.Login; 
+    return ScreenRouteNames.Login;
   };
 
   if (state.loading) {
@@ -113,29 +117,26 @@ function App(): React.JSX.Element {
 
   return (
     <SafeAreaProvider>
-      <GestureHandlerRootView>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName={getInitialRoute()}>
-            <Stack.Screen name={ScreenRouteNames.Onboarding}
-              component={OnboardingScreen}
-              options={{
-                ...headerParams,
-                statusBarTranslucent: true,
-                statusBarColor: 'transparent'
-              }} />
-            <Stack.Screen name={ScreenRouteNames.Login}
-              component={LoginScreen}
-              options={{
-                ...headerParams,
-                statusBarTranslucent: true,
-                statusBarColor: 'transparent'
-              }} />
+      <DebounceContext.Provider value={new Map()}>
+        <GestureHandlerRootView>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName={getInitialRoute()}>
+              <Stack.Screen name={ScreenRouteNames.Onboarding}
+                component={OnboardingScreen}
+                options={headerParams} />
+              <Stack.Screen name={ScreenRouteNames.Login}
+                component={LoginScreen}
+                options={headerParams} />
               <Stack.Screen name={ScreenRouteNames.Home}
-              component={HomeScreen}
-              options={headerParams} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </GestureHandlerRootView>
+                component={HomeScreen}
+                options={headerParams} />
+              <Stack.Screen name={ScreenRouteNames.Search}
+                component={SearchScreen}
+                options={headerParams} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </GestureHandlerRootView>
+      </DebounceContext.Provider>
     </SafeAreaProvider>
   );
 }
