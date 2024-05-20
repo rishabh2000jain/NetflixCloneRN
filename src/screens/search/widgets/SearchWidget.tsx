@@ -20,7 +20,7 @@ const SearchWidget = ({ onTextChange }: Props) => {
 
 const styles = StyleSheet.create({
     searchBarContainer: {
-        height: 'auto',
+        height: 50,
         width: '100%',
         paddingHorizontal: 17,
         backgroundColor: '#433C3C',

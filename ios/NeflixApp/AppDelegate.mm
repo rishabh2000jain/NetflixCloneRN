@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 #import "RNSplashScreen.h"
 #import <React/RCTBundleURLProvider.h>
+#import <Firebase.h>
 
 @implementation AppDelegate
 
@@ -11,6 +12,7 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
   BOOL showScreen = [super application:application didFinishLaunchingWithOptions:launchOptions];
+  [FIRApp configure];
    if (showScreen == YES) {
      [RNSplashScreen show];
    }

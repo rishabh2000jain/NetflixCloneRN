@@ -8,19 +8,22 @@ export const DebounceContext = createContext<Map<string, NodeJS.Timeout>>(
 
 export function useDebounce({
   onComplete,
+  onStart,
   key,
   time = 700,
 }: {
   onComplete: OnCompleteType;
+  onStart?:()=>void;
   time: number;
   key: string;
 }) {
   const debounceMapRef = useRef(useContext(DebounceContext));
   const debounce = (data: any) => {
     const debounceMap = debounceMapRef.current;
-    console.log(debounceMap);
     if (debounceMap.has(key)) {
       clearTimeout(debounceMap.get(key));
+    }else{
+      onStart?.();
     }
     let timer = setTimeout(() => {
       debounceMap.delete(key);
