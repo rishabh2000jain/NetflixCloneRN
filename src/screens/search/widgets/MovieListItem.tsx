@@ -1,20 +1,23 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
-import Icon  from 'react-native-vector-icons/FontAwesome6';
-import { AppColors } from '../../../util/AppColors';
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import {AppColors} from '../../../util/AppColors';
 
 type ComponentPropsType = {
-  image: string ;
+  id: string;
+  image: string;
   title: string;
+  onBookmark: (id: string) => void;
 };
 
-const MovieListItem = ({image, title}: ComponentPropsType) => {
+const MovieListItem = ({id, image, title, onBookmark}: ComponentPropsType) => {
   return (
     <View style={styles.movieListItem}>
-      <FastImage 
-      source = {{
-          uri: image == 'N/A'
+      <FastImage
+        source={{
+          uri:
+            image == 'N/A'
               ? 'https://images.ctfassets.net/4cd45et68cgf/4nBnsuPq03diC5eHXnQYx/d48a4664cdc48b6065b0be2d0c7bc388/Netflix-Logo.jpg'
               : image,
           priority: FastImage.priority.normal,
@@ -28,7 +31,14 @@ const MovieListItem = ({image, title}: ComponentPropsType) => {
         style={styles.movieListItemTitle}>
         {title}
       </Text>
-      <Icon name='bookmark' color={AppColors.onBackground} size={18}/>
+      <Icon
+        name="bookmark"
+        color={AppColors.onBackground}
+        size={18}
+        onPress={() => {
+          onBookmark(id);
+        }}
+      />
     </View>
   );
 };
@@ -45,7 +55,6 @@ const styles = StyleSheet.create({
   movieListItemImage: {
     height: 72,
     width: 100,
-    marginEnd: 8,
     resizeMode: 'contain',
   },
   movieListItemTitle: {
@@ -54,5 +63,6 @@ const styles = StyleSheet.create({
     color: 'white',
     flex: 1,
     textAlign: 'left',
+    marginHorizontal: 8,
   },
 });
