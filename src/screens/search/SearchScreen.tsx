@@ -3,8 +3,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   View,
-  Modal,
-  KeyboardAvoidingView,
+  FlatList
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -20,15 +19,16 @@ import {FlashList} from '@shopify/flash-list';
 import EmptyListComponent from './widgets/EmptyListComponent';
 import BottomSheetModal from '../../components/BottomSheetModal';
 import BookmarkWidget from './widgets/BookmarkWidget';
+
 type Props = NativeStackScreenProps<RootStackParamList, 'Search'>;
 
 const SearchScreen = ({navigation, route}: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [showBookmarkModal, setShowBookmarkModal] = useState<boolean>(false);
+  const [bookmarkItem, setBookmarkItem] = useState<any>();
   const [searchData, setSearchData] = useState<Array<any>>([]);
   const pagingData = useRef<PagingType>({nextPageKey: 1, currPageKey: null});
-
   const searchMovies = async (title: string) => {
     const data = await searchMovieByTitle(
       title,
@@ -137,6 +137,7 @@ const SearchScreen = ({navigation, route}: Props) => {
                 image={item.Poster}
                 title={item.Title}
                 onBookmark={id => {
+                  setBookmarkItem(item);
                   setShowBookmarkModal(true);
                 }}
               />
@@ -151,9 +152,7 @@ const SearchScreen = ({navigation, route}: Props) => {
           setIsOpen={setShowBookmarkModal}
           title='Bookmark'
           >
-            <BookmarkWidget />
-          
-
+            <BookmarkWidget movie={bookmarkItem}  setIsOpen={setShowBookmarkModal}/>
         </BottomSheetModal>
       )}
       {loading ? (

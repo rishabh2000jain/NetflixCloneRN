@@ -4,24 +4,103 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {AppColors} from '../../../util/AppColors';
+import {
+  getBookmarks,
+  createLibrary,
+  addMovie,
+} from '../../../app/BookmarksReducer';
+import {useAppDispatch, useAppSelector} from '../../../app/Hooks';
+import EmptyListComponent from './EmptyListComponent';
 
-const BookmarkWidget = () => {
+const BookmarkWidget = ({
+  movie,
+  setIsOpen,
+}: {
+  movie: any;
+  setIsOpen: (isOpen: boolean) => void;
+}) => {
+  const dispature = useAppDispatch();
+  const bookmarkLibrarySelector = useAppSelector(state => state.bookmark);
+  const [libraryName, setLibraryName] = useState<string>();
+  const screehHeight = Dimensions.get('window').height;
+  useEffect(() => {
+    if (['none', 'error'].includes(bookmarkLibrarySelector.loadBookmarkState)) {
+      dispature(getBookmarks());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      bookmarkLibrarySelector.createLibraryState == 'success'
+    ) {
+      setLibraryName('');
+      setIsOpen(false);
+    }
+  }, [
+    bookmarkLibrarySelector.createLibraryState,
+  ]);
+
   return (
-    <View style={styles.newLibraryContainer}>
-      <TextInput
-        style={styles.newLibraryTextInput}
-        onChangeText={text => {
-          console.log(text);
-        }}
-        placeholderTextColor={AppColors.onModalBackground}
-        placeholder="New Library Name"
-      />
-      <TouchableOpacity style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Save</Text>
-      </TouchableOpacity>
+    <View style={{height: screehHeight * 0.5}}>
+      <View style={styles.newLibraryContainer}>
+        <TextInput
+          style={styles.newLibraryTextInput}
+          value={libraryName}
+          onChangeText={text => {
+            setLibraryName(text);
+          }}
+          placeholderTextColor={AppColors.onModalBackground}
+          placeholder="New Library Name"
+          cursorColor={AppColors.onBackground}
+        />
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={() => {
+            dispature(createLibrary({movie, libraryName: libraryName}));
+          }}>
+          {bookmarkLibrarySelector.createLibraryState == 'loading' ? (
+            <ActivityIndicator color={AppColors.onPrimary} />
+          ) : (
+            <Text style={styles.saveButtonText}>Save</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+      {bookmarkLibrarySelector.loadBookmarkState == 'loading' && (
+        <ActivityIndicator />
+      )}
+      {bookmarkLibrarySelector.loadBookmarkState == 'error' && (
+        <Text>{bookmarkLibrarySelector.extra}</Text>
+      )}
+      {bookmarkLibrarySelector.loadBookmarkState == 'success' && (
+        <FlatList
+          contentContainerStyle={{paddingTop: 16, gap: 8}}
+          data={bookmarkLibrarySelector.bookmarks}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.bookmarkListItem}
+                onPress={() => {
+                  dispature(addMovie({movie, libraryId: item.id}));
+                  setIsOpen(false);
+                }}>
+                <Text style={styles.bookmarkListItemText}>{item.name}</Text>
+              </TouchableOpacity>
+            );
+          }}
+          ListEmptyComponent={() => {
+            return (
+              <EmptyListComponent text="No Library found!Please add one." />
+            );
+          }}
+        />
+      )}
     </View>
   );
 };
@@ -56,4 +135,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'semibold',
   },
+  bookmarkListItem: {
+    backgroundColor: AppColors.secondary,
+    borderRadius: 8,
+    padding: 12,
+    marginHorizontal: 8,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  bookmarkListItemText: {
+    color: AppColors.onBackground,
+    fontSize: 20,
+    fontWeight: '600',
+    marginStart: 16,
+  },
 });
+function ApiState(ApiState: any) {
+  throw new Error('Function not implemented.');
+}

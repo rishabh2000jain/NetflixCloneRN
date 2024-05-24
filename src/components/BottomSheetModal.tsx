@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   contentContainer: {
-    height: 'auto',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: AppColors.modalBackground,

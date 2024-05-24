@@ -85,7 +85,7 @@ export default function LoginScreen({navigation}: Props) {
                 email,
                 password,
               );
-              await firestore().collection('Users').doc().set({
+              await firestore().collection('Users').doc(creds.user.uid).set({
                 email: email,
               });
             } else {

@@ -16,6 +16,7 @@
     "@react-native-firebase/firestore": "^19.2.2",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
+    "@reduxjs/toolkit": "^2.2.5",
     "@shopify/flash-list": "^1.6.4",
     "axios": "^1.6.8",
     "react": "18.2.0",

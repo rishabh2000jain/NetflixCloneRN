@@ -7,4 +7,5 @@ export const AppColors = {
     onPrimary:'white',
     secondary:'#433C3C',
     onSecondary:'white',
+    tertiary:'grey'
 };
