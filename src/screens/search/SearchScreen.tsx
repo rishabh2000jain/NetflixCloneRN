@@ -3,24 +3,23 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   View,
-  FlatList
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../util/NavigationParamList';
+import {AppStackParamList} from '../../routes/RouteParamList';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchWidget from './widgets/SearchWidget';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import {useDebounce} from '../../util/Debounce';
 import {searchMovieByTitle} from './SearchController';
 import {PagingType} from '../../util/PagingType';
-import MovieListItem from './widgets/MovieListItem';
+import MovieListItem from '../../components/MovieListItem';
 import {FlashList} from '@shopify/flash-list';
 import EmptyListComponent from './widgets/EmptyListComponent';
 import BottomSheetModal from '../../components/BottomSheetModal';
 import BookmarkWidget from './widgets/BookmarkWidget';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Search'>;
+type Props = NativeStackScreenProps<AppStackParamList, 'Search'>;
 
 const SearchScreen = ({navigation, route}: Props) => {
   const [loading, setLoading] = useState<boolean>(false);

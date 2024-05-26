@@ -3,7 +3,7 @@ import React, { FunctionComponent, useRef, useState } from 'react';
 import OnboardingPageComponent from './OnboardingPageComponent';
 import StorageKeys,{setValue,getValue} from '../../util/AppDBStorage'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../util/NavigationParamList';
+import { RootStackParamList } from '../../routes/NavigationParamList';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Onboarding'>;
 
@@ -46,6 +46,7 @@ const OnboardingScreen = ({navigation}:Props) => {
         <ScrollView
           style={{ flex: 1 }}
           scrollEnabled
+          showsHorizontalScrollIndicator={false}
           horizontal={true}
           pagingEnabled={true}
           ref={viewPager}

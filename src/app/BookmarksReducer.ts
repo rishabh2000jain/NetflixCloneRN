@@ -1,8 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {getBookmarkList,createLibraryToFirebase,addMovieToLibrary} from '../screens/search/BookmarkController';
+import { ApiStates } from '../util/ApiResponse';
 
-
-type ApiStates = 'loading'|'error'|'success'|'none';
 
 type BookmarksState = {
   loadBookmarkState: ApiStates;

@@ -8,3 +8,5 @@ export type ApiErrorResponseType = {
     data:any;
     code?:string|null;
 };
+
+export type ApiStates = 'loading'|'error'|'success'|'none';

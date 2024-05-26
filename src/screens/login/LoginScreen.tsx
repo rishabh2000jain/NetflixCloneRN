@@ -11,20 +11,22 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import validator from 'validator';
 import Toast from 'react-native-simple-toast';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../util/NavigationParamList';
+import {AppStackParamList} from '../../routes/RouteParamList';
+import { useAppDispatch, useAppSelector } from '../../app/Hooks';
+import { checkAuthStatus } from '../../app/AppReducer';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
+type Props = NativeStackScreenProps<AppStackParamList, 'Login'>;
 
 export default function LoginScreen({navigation}: Props) {
   const [email, updateEmail] = useState<string>('');
   const [password, updatePassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const appDispatchure = useAppDispatch();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,14 +88,14 @@ export default function LoginScreen({navigation}: Props) {
                 password,
               );
               await firestore().collection('Users').doc(creds.user.uid).set({
-                email: email,
+                email: email.toLocaleLowerCase(),
               });
             } else {
               creds = await auth().signInWithEmailAndPassword(email, password);
             }
-
             if (creds.user) {
-              navigation.replace('Home');
+              appDispatchure(checkAuthStatus());
+              navigation.push('Search');
             }
           } catch (error: any) {
             const errorCode = error.code;

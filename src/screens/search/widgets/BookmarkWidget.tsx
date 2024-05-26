@@ -17,6 +17,7 @@ import {
 } from '../../../app/BookmarksReducer';
 import {useAppDispatch, useAppSelector} from '../../../app/Hooks';
 import EmptyListComponent from './EmptyListComponent';
+import LibraryListItem from '../../../components/LibraryListItem';
 
 const BookmarkWidget = ({
   movie,
@@ -85,12 +86,11 @@ const BookmarkWidget = ({
             return (
               <TouchableOpacity
                 key={item.id}
-                style={styles.bookmarkListItem}
                 onPress={() => {
                   dispature(addMovie({movie, libraryId: item.id}));
                   setIsOpen(false);
                 }}>
-                <Text style={styles.bookmarkListItemText}>{item.name}</Text>
+                <LibraryListItem libraryName={item.name}/>
               </TouchableOpacity>
             );
           }}
@@ -134,22 +134,7 @@ const styles = StyleSheet.create({
     color: AppColors.onPrimary,
     fontSize: 16,
     fontWeight: 'semibold',
-  },
-  bookmarkListItem: {
-    backgroundColor: AppColors.secondary,
-    borderRadius: 8,
-    padding: 12,
-    marginHorizontal: 8,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  bookmarkListItemText: {
-    color: AppColors.onBackground,
-    fontSize: 20,
-    fontWeight: '600',
-    marginStart: 16,
-  },
+  }
 });
 function ApiState(ApiState: any) {
   throw new Error('Function not implemented.');

@@ -2,21 +2,26 @@ import { View, Text, Button,Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import auth from '@react-native-firebase/auth';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../util/NavigationParamList';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon  from 'react-native-vector-icons/FontAwesome6';
+import { BottomTabsParamList } from '../../routes/RouteParamList';
+import { useAppDispatch } from '../../app/Hooks';
+import { checkAuthStatus } from '../../app/AppReducer';
 
 
-type Props = NativeStackScreenProps<RootStackParamList,'Home'>;
+
+type Props = NativeStackScreenProps<BottomTabsParamList,'Home'>;
 
 const HomeScreen = ({navigation}:Props) => {
+  const appDispatcher = useAppDispatch();
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
       <Image source={require('../../images/Logonetflix.png')} style={styles.netflixLogo}/>
       <TouchableOpacity onPress={()=>{
-        navigation.push('Search');
+        navigation.getParent()?.navigate('Search');
       }}>
           <Icon name='magnifying-glass' color={'#FFFBFB'} size={20}/>
       </TouchableOpacity>
@@ -24,7 +29,7 @@ const HomeScreen = ({navigation}:Props) => {
       <Text>HomeScreen</Text>
       <Button title='Logout' onPress={()=>{
         auth().signOut().then((e)=>{
-          navigation.replace('Login');
+          appDispatcher(checkAuthStatus());
         });
       }}/>
     </SafeAreaView>

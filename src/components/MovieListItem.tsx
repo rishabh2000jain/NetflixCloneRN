@@ -2,16 +2,25 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import {AppColors} from '../../../util/AppColors';
+import {AppColors} from '../util/AppColors';
 
 type ComponentPropsType = {
   id: string;
   image: string;
   title: string;
-  onBookmark: (id: string) => void;
+  onBookmark?: (id: string) => void;
+  onRemove?: (id: string) => void;
+  showRemove?: boolean|null;
 };
 
-const MovieListItem = ({id, image, title, onBookmark}: ComponentPropsType) => {
+const MovieListItem = ({
+  id,
+  image,
+  title,
+  onBookmark,
+  showRemove,
+  onRemove,
+}: ComponentPropsType) => {
   return (
     <View style={styles.movieListItem}>
       <FastImage
@@ -31,14 +40,25 @@ const MovieListItem = ({id, image, title, onBookmark}: ComponentPropsType) => {
         style={styles.movieListItemTitle}>
         {title}
       </Text>
-      <Icon
-        name="bookmark"
-        color={AppColors.onBackground}
-        size={18}
-        onPress={() => {
-          onBookmark(id);
-        }}
-      />
+      {showRemove ? (
+        <Icon
+          name="trash"
+          color={AppColors.primary}
+          size={18}
+          onPress={() => {
+            onRemove?.(id);
+          }}
+        />
+      ):(
+        <Icon
+          name="bookmark"
+          color={AppColors.onBackground}
+          size={18}
+          onPress={() => {
+            onBookmark?.(id);
+          }}
+        />
+      ) }
     </View>
   );
 };
