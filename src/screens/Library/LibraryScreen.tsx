@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,8 +13,9 @@ import {AppColors} from '../../util/AppColors';
 import LibraryListItem from '../../components/LibraryListItem';
 import EmptyListComponent from '../search/widgets/EmptyListComponent';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {BottomTabsParamList} from '../../routes/RouteParamList';
+import {AuthStackParamList, BottomTabsParamList} from '../../routes/RouteParamList';
 import {View} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<BottomTabsParamList, 'Library'>;
 
@@ -50,7 +50,7 @@ const LibraryScreen = ({navigation, route}: Props) => {
         )}
         {librarySelector.loadBookmarkState == 'success' && (
           <FlatList
-            contentContainerStyle={{marginTop: 20}}
+            contentContainerStyle={{marginTop: 20,gap:9}}
             data={librarySelector.bookmarks}
             ListEmptyComponent={() => {
               return <EmptyListComponent text="No library found!" />;
@@ -63,7 +63,7 @@ const LibraryScreen = ({navigation, route}: Props) => {
                       .getParent()
                       ?.navigate('MoviesList', {id: item.id, name: item.name});
                   }}>
-                  <LibraryListItem libraryName={item.name} />
+                  <LibraryListItem key={item.id} libraryName={item.name} />
                 </TouchableOpacity>
               );
             }}

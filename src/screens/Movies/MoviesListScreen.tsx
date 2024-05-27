@@ -1,4 +1,4 @@
-import {ActivityIndicator, Button, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Button, StyleSheet, Text, View,FlatList} from 'react-native';
 import React, {useEffect, useReducer, Reducer} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AppStackParamList} from '../../routes/RouteParamList';
@@ -6,7 +6,6 @@ import {getSavedMoviesList, removeSavedMovie} from './MoviesController';
 import {MovieListItemType} from '../Library/type';
 import {AppColors} from '../../util/AppColors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {FlashList} from '@shopify/flash-list';
 import MovieListItem from '../../components/MovieListItem';
 import EmptyListComponent from '../search/widgets/EmptyListComponent';
 
@@ -60,9 +59,9 @@ const MoviesListScreen = ({navigation, route}: Props) => {
       });
   };
 
-  const removeMovies = (movieId:string) => {
+  const removeMovies = (movieId: string) => {
     dispatch({type: 'loading'});
-    removeSavedMovie(route.params.id,movieId)
+    removeSavedMovie(route.params.id, movieId)
       .then(movies => {
         dispatch({type: 'success', movies});
       })
@@ -78,6 +77,8 @@ const MoviesListScreen = ({navigation, route}: Props) => {
       headerTitleStyle: {
         color: AppColors.onBackground,
       },
+      headerTintColor:AppColors.onBackground,
+      fullScreenGestureEnabled:true,
       headerStyle: {
         backgroundColor: AppColors.background,
       },
@@ -94,14 +95,15 @@ const MoviesListScreen = ({navigation, route}: Props) => {
         />
       )}
       {moviesListState.success && (
-        <FlashList
-          estimatedItemSize={72}
+        <FlatList
+          style={{flex:1}}
           ItemSeparatorComponent={() => {
             return <View style={styles.movieListSeprator} />;
           }}
+          contentContainerStyle={{paddingHorizontal:16}}
           data={moviesListState.movies}
-          ListEmptyComponent={()=>{
-            return <EmptyListComponent text='No Movies Available'/>
+          ListEmptyComponent={() => {
+            return <EmptyListComponent text="No Movies Available" />;
           }}
           renderItem={({item}: {item: MovieListItemType}) => {
             return (
@@ -110,7 +112,7 @@ const MoviesListScreen = ({navigation, route}: Props) => {
                 image={item.Poster}
                 title={item.Title}
                 showRemove
-                onRemove={(id)=>{
+                onRemove={id => {
                   removeMovies(id);
                 }}
               />
@@ -132,7 +134,9 @@ const styles = StyleSheet.create({
     backgroundColor: AppColors.background,
     flex: 1,
   },
-  loaderStyle: {flex: 1},
+  loaderStyle: {
+    flex: 1,
+  },
   movieListSeprator: {
     height: 9,
   },

@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AppStackParamList} from '../../routes/RouteParamList';
+import {AppStackParamList, AuthStackParamList} from '../../routes/RouteParamList';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchWidget from './widgets/SearchWidget';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -20,6 +20,7 @@ import BottomSheetModal from '../../components/BottomSheetModal';
 import BookmarkWidget from './widgets/BookmarkWidget';
 
 type Props = NativeStackScreenProps<AppStackParamList, 'Search'>;
+
 
 const SearchScreen = ({navigation, route}: Props) => {
   const [loading, setLoading] = useState<boolean>(false);

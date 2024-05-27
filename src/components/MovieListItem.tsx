@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Linking, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -76,6 +76,9 @@ const styles = StyleSheet.create({
     height: 72,
     width: 100,
     resizeMode: 'contain',
+    borderRadius:16,
+    borderColor:AppColors.onBackground,
+    borderWidth:1
   },
   movieListItemTitle: {
     fontSize: 18,

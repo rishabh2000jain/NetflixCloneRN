@@ -15,7 +15,9 @@ const headerParams = {
 
 export function AppStack() {
   return (
-    <Stack.Navigator initialRouteName={'BottomNav'}>
+    <Stack.Navigator
+      initialRouteName={'BottomNav'}
+      screenOptions={{animation: 'slide_from_right'}}>
       <Stack.Screen
         name="Search"
         component={SearchScreen}
@@ -26,7 +28,11 @@ export function AppStack() {
         component={BottomNavScreen}
         options={headerParams}
       />
-      <Stack.Screen name="MoviesList" component={MoviesListScreen} />
+      <Stack.Screen
+        name="MoviesList"
+        component={MoviesListScreen}
+        options={{...headerParams, headerShown: true}}
+      />
     </Stack.Navigator>
   );
 }

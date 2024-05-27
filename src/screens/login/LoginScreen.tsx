@@ -16,11 +16,11 @@ import Toast from 'react-native-simple-toast';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AppStackParamList} from '../../routes/RouteParamList';
+import {AuthStackParamList} from '../../routes/RouteParamList';
 import { useAppDispatch, useAppSelector } from '../../app/Hooks';
 import { checkAuthStatus } from '../../app/AppReducer';
 
-type Props = NativeStackScreenProps<AppStackParamList, 'Login'>;
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 export default function LoginScreen({navigation}: Props) {
   const [email, updateEmail] = useState<string>('');
@@ -93,9 +93,10 @@ export default function LoginScreen({navigation}: Props) {
             } else {
               creds = await auth().signInWithEmailAndPassword(email, password);
             }
+            console.log(creds.user);
+            
             if (creds.user) {
               appDispatchure(checkAuthStatus());
-              navigation.push('Search');
             }
           } catch (error: any) {
             const errorCode = error.code;

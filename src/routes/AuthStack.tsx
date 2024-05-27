@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from '../screens/login/LoginScreen';
 import OnboardingScreen from '../screens/onboarding/OnboardingScreen';
+import SearchScreen from '../screens/search/SearchScreen';
 import {AuthStackParamList} from './RouteParamList';
 
 const headerParams = {

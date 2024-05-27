@@ -61,7 +61,7 @@ export const initialApplicationState = createAsyncThunk(
   'check-initial-app-state',
   async (data, thunkApi) => {
     if(firebase.apps.length == 0){
-    await firebase.initializeApp(credentials);
+      await firebase.initializeApp(credentials);
     }
     const response = await Promise.all([
       showOnBoardingScreen(),
