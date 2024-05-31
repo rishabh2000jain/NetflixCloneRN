@@ -58,7 +58,7 @@ const BottomNavScreen = ({navigation}: Params) => {
       <Tab.Screen
         name="Reels"
         component={HomeScreen}
-        options={{tabBarHideOnKeyboard: true,tabBarStyle:{display:'none'},unmountOnBlur:true}}
+        options={{tabBarHideOnKeyboard: true,tabBarStyle:{display:'none'}}}
       />
       <Tab.Screen name="Account" component={AccountsScreen} />
     </Tab.Navigator>
