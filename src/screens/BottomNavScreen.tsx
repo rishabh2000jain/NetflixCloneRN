@@ -1,4 +1,4 @@
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from './home/HomeScreen';
@@ -7,14 +7,16 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import {AppColors} from '../util/AppColors';
 import AccountsScreen from './account/AccountsScreen';
-import { BottomTabsParamList } from '../routes/RouteParamList';
+import {BottomTabsParamList} from '../routes/RouteParamList';
 import LibraryScreen from './Library/LibraryScreen';
+
 
 const Tab = createBottomTabNavigator<BottomTabsParamList>();
 type Params = NativeStackScreenProps<AppStackParamList, 'BottomNav'>;
 
 const BottomNavScreen = ({navigation}: Params) => {
   return (
+    <View style={{flex: 1,backgroundColor:AppColors.modalBackground}}>
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
@@ -22,13 +24,9 @@ const BottomNavScreen = ({navigation}: Params) => {
         tabBarInactiveTintColor: AppColors.onBackground,
         tabBarAllowFontScaling: true,
         tabBarStyle: {
-          height: 65,
           backgroundColor: AppColors.modalBackground,
           borderTopWidth: 0,
           elevation: 0,
-        },
-        tabBarItemStyle: {
-          paddingVertical: 10,
         },
         tabBarIcon: ({color, focused, size}) => {
           let iconName = '';
@@ -56,10 +54,15 @@ const BottomNavScreen = ({navigation}: Params) => {
           return <Text style={style}>{route.name}</Text>;
         },
       })}>
-      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Library" component={LibraryScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{tabBarHideOnKeyboard: true,tabBarStyle:{display:'none'},unmountOnBlur:true}}
+      />
       <Tab.Screen name="Account" component={AccountsScreen} />
     </Tab.Navigator>
+    </View>
   );
 };
 

@@ -1,15 +1,12 @@
 import {
   StyleSheet,
-  TouchableOpacity,
   ActivityIndicator,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AppStackParamList, AuthStackParamList} from '../../routes/RouteParamList';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {AppStackParamList} from '../../routes/RouteParamList';
 import SearchWidget from './widgets/SearchWidget';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import {useDebounce} from '../../util/Debounce';
 import {searchMovieByTitle} from './SearchController';
 import {PagingType} from '../../util/PagingType';
@@ -18,6 +15,7 @@ import {FlashList} from '@shopify/flash-list';
 import EmptyListComponent from './widgets/EmptyListComponent';
 import BottomSheetModal from '../../components/BottomSheetModal';
 import BookmarkWidget from './widgets/BookmarkWidget';
+import { AppColors } from '../../util/AppColors';
 
 type Props = NativeStackScreenProps<AppStackParamList, 'Search'>;
 
@@ -29,6 +27,21 @@ const SearchScreen = ({navigation, route}: Props) => {
   const [bookmarkItem, setBookmarkItem] = useState<any>();
   const [searchData, setSearchData] = useState<Array<any>>([]);
   const pagingData = useRef<PagingType>({nextPageKey: 1, currPageKey: null});
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Search',
+      headerBackTitle: 'Back',
+      headerTitleStyle: {
+        color: AppColors.onBackground,
+      },
+      headerTintColor: AppColors.onBackground,
+      headerStyle: {
+        backgroundColor: AppColors.background,
+      },
+    });
+  });
+
   const searchMovies = async (title: string) => {
     const data = await searchMovieByTitle(
       title,
@@ -79,18 +92,7 @@ const SearchScreen = ({navigation, route}: Props) => {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.pop();
-        }}>
-        <Icon
-          name="arrow-left"
-          size={24}
-          color={'white'}
-          style={styles.backButton}
-        />
-      </TouchableOpacity>
+    <View style={styles.container}>
       <SearchWidget
         onTextChange={text => {
           setLoading(true);
@@ -160,7 +162,7 @@ const SearchScreen = ({navigation, route}: Props) => {
       ) : (
         <></>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -168,10 +170,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-  },
-  backButton: {
-    marginHorizontal: 20,
-    marginBottom: 20,
   },
   loader: {
     position: 'absolute',

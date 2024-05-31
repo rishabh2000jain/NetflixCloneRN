@@ -1,4 +1,10 @@
-import {ActivityIndicator, Button, StyleSheet, Text, View,FlatList} from 'react-native';
+import {
+  ActivityIndicator,
+  Button,
+  StyleSheet,
+  View,
+  FlatList,
+} from 'react-native';
 import React, {useEffect, useReducer, Reducer} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AppStackParamList} from '../../routes/RouteParamList';
@@ -77,8 +83,8 @@ const MoviesListScreen = ({navigation, route}: Props) => {
       headerTitleStyle: {
         color: AppColors.onBackground,
       },
-      headerTintColor:AppColors.onBackground,
-      fullScreenGestureEnabled:true,
+      headerTintColor: AppColors.onBackground,
+      fullScreenGestureEnabled: true,
       headerStyle: {
         backgroundColor: AppColors.background,
       },
@@ -86,8 +92,10 @@ const MoviesListScreen = ({navigation, route}: Props) => {
 
     getMovies();
   }, []);
+
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {moviesListState.loading && (
         <ActivityIndicator
           color={AppColors.primary}
@@ -96,11 +104,11 @@ const MoviesListScreen = ({navigation, route}: Props) => {
       )}
       {moviesListState.success && (
         <FlatList
-          style={{flex:1}}
+          style={{flex: 1}}
           ItemSeparatorComponent={() => {
             return <View style={styles.movieListSeprator} />;
           }}
-          contentContainerStyle={{paddingHorizontal:16}}
+          contentContainerStyle={{paddingHorizontal: 16}}
           data={moviesListState.movies}
           ListEmptyComponent={() => {
             return <EmptyListComponent text="No Movies Available" />;
@@ -123,7 +131,7 @@ const MoviesListScreen = ({navigation, route}: Props) => {
       {moviesListState.error && (
         <Button title="Refresh" onPress={getMovies} color={AppColors.primary} />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

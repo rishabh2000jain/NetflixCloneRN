@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen from '../screens/login/LoginScreen';
 import OnboardingScreen from '../screens/onboarding/OnboardingScreen';
-import SearchScreen from '../screens/search/SearchScreen';
+import TermsAndCondition from '../screens/public/TermsAndCondition';
 import {AuthStackParamList} from './RouteParamList';
 
 const headerParams = {
@@ -29,6 +29,11 @@ export function AuthStack({
         name="Onboarding"
         component={OnboardingScreen}
         options={headerParams}
+      />
+      <Stack.Screen
+        name="TermsAndCondition"
+        component={TermsAndCondition}
+        options={{...headerParams, headerShown: true}}
       />
     </Stack.Navigator>
   );

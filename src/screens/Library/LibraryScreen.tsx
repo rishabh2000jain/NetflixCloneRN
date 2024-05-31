@@ -13,31 +13,46 @@ import {AppColors} from '../../util/AppColors';
 import LibraryListItem from '../../components/LibraryListItem';
 import EmptyListComponent from '../search/widgets/EmptyListComponent';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AuthStackParamList, BottomTabsParamList} from '../../routes/RouteParamList';
+import {BottomTabsParamList} from '../../routes/RouteParamList';
 import {View} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import { videosListThunk } from '../../app/VideosReducer';
 
 type Props = NativeStackScreenProps<BottomTabsParamList, 'Library'>;
 
 const LibraryScreen = ({navigation, route}: Props) => {
   const librarySelector = useAppSelector(state => state.bookmark);
-  const libraryDispature = useAppDispatch();
+  const dispature = useAppDispatch();
+  const videoSelector = useAppSelector(state=>state.videos.videos);
 
   useEffect(() => {
     if (
       librarySelector.loadBookmarkState == 'none' ||
       librarySelector.loadBookmarkState == 'error'
     ) {
-      libraryDispature(getBookmarks());
+      dispature(getBookmarks());
+    }
+    if(videoSelector.length == 0){      
+      dispature(videosListThunk({pageNo:1,pageSize:10}));
     }
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        source={require('../../images/Logonetflix.png')}
-        style={styles.netflixLogo}
-      />
+      <View style={styles.header}>
+        <Image
+          source={require('../../images/Logonetflix.png')}
+          style={styles.netflixLogo}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.getParent()?.navigate('Search');
+          }}>
+          <Icon name="magnifying-glass" color={'#FFFBFB'} size={20} />
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.content}>
         {librarySelector.loadBookmarkState == 'loading' && (
           <ActivityIndicator
@@ -50,7 +65,7 @@ const LibraryScreen = ({navigation, route}: Props) => {
         )}
         {librarySelector.loadBookmarkState == 'success' && (
           <FlatList
-            contentContainerStyle={{marginTop: 20,gap:9}}
+            contentContainerStyle={{marginTop: 20, gap: 9}}
             data={librarySelector.bookmarks}
             ListEmptyComponent={() => {
               return <EmptyListComponent text="No library found!" />;
@@ -98,5 +113,11 @@ const styles = StyleSheet.create({
   loaderStyle: {
     alignSelf: 'center',
     flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: 24,
   },
 });

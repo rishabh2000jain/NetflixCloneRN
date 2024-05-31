@@ -1,7 +1,5 @@
 
 export type AppStackParamList = {
-  Onboarding: undefined;
-  Login: undefined;
   Search: undefined;
   BottomNav: undefined;
   MoviesList: {
@@ -9,12 +7,14 @@ export type AppStackParamList = {
     name: string;
   };
   Home: undefined;
+  TermsAndCondition:undefined;
 };
 
 
 export type AuthStackParamList = {
   Onboarding: undefined;
   Login: undefined;
+  TermsAndCondition:undefined;
 };
 
 
