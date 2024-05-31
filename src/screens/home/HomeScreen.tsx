@@ -5,7 +5,7 @@ import {BottomTabsParamList} from '../../routes/RouteParamList';
 import VideoList from './components/VideoList';
 
 
-type Props = NativeStackScreenProps<BottomTabsParamList, 'Home'>;
+type Props = NativeStackScreenProps<BottomTabsParamList, 'Reels'>;
 const HomeScreen = ({navigation}: Props) => {
   return (
       <View style={styles.container}>

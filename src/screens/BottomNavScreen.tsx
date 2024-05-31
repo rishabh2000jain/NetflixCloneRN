@@ -31,7 +31,7 @@ const BottomNavScreen = ({navigation}: Params) => {
         tabBarIcon: ({color, focused, size}) => {
           let iconName = '';
           switch (route.name) {
-            case 'Home':
+            case 'Reels':
               iconName = 'video';
               break;
             case 'Library':
@@ -56,7 +56,7 @@ const BottomNavScreen = ({navigation}: Params) => {
       })}>
       <Tab.Screen name="Library" component={LibraryScreen} />
       <Tab.Screen
-        name="Home"
+        name="Reels"
         component={HomeScreen}
         options={{tabBarHideOnKeyboard: true,tabBarStyle:{display:'none'},unmountOnBlur:true}}
       />

@@ -6,7 +6,7 @@ export type AppStackParamList = {
     id: string;
     name: string;
   };
-  Home: undefined;
+  Reels: undefined;
   TermsAndCondition:undefined;
 };
 
@@ -20,7 +20,7 @@ export type AuthStackParamList = {
 
 
 export type BottomTabsParamList = {
-  Home: undefined;
+  Reels: undefined;
   Library: undefined;
   Account: undefined;
 };
