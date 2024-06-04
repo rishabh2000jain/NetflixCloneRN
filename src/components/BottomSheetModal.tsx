@@ -10,7 +10,6 @@ import {
 import React, {FC, PropsWithChildren} from 'react';
 import {AppColors} from '../util/AppColors';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type ModalProps = {
   isOpen: boolean;
@@ -24,7 +23,6 @@ const BottomSheetModal: FC<ModalProps & PropsWithChildren> = ({
   isOpen,
   setIsOpen,
 }) => {
-  const insets = useSafeAreaInsets();
 
   return (
     <Modal
@@ -36,7 +34,6 @@ const BottomSheetModal: FC<ModalProps & PropsWithChildren> = ({
         setIsOpen(!isOpen);
       }}>
       <KeyboardAvoidingView
-        keyboardVerticalOffset={insets.bottom}
         behavior="padding">
         <View style={styles.modalStyle}>
           <View style={styles.contentContainer}>

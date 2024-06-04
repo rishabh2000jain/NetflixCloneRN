@@ -1,6 +1,5 @@
-import {firebase} from '@react-native-firebase/firestore';
-import {MovieListItemType} from './type';
-
+import { firebase } from '@react-native-firebase/firestore';
+import { MovieListItemType } from './type';
 export const getLibraryMovies = async (
   libraryId: string,
 ): Promise<MovieListItemType[]> => {
@@ -12,6 +11,24 @@ export const getLibraryMovies = async (
   return snapshot.data() as MovieListItemType[];
 };
 
+export const deleteLibrary = async (
+  libraryId: string,
+): Promise<void> => {
+  await firebase
+    .firestore()
+    .collection('Bookmarks')
+    .doc(libraryId)
+    .delete();
+  await firebase
+    .firestore()
+    .collection('Users')
+    .doc(firebase.app().auth().currentUser?.uid)
+    .collection('BookbarkLibrary')
+    .doc(libraryId)
+    .delete();
+
+};
+
 export const removeMovie = async (
   libraryId: string,
   imdbId: string,
@@ -19,7 +36,7 @@ export const removeMovie = async (
   try {
     const movies = await getLibraryMovies(libraryId);
     const filteredMovies = movies.filter(e => e.imdbID != imdbId);
-    return await updateMovies(libraryId,filteredMovies);
+    return await updateMovies(libraryId, filteredMovies);
   } catch (e) {
     console.error(e);
   }
@@ -40,7 +57,7 @@ export const updateMovies = async (
       });
     return true;
   } catch (e) {
-      console.error(e);
+    console.error(e);
   }
   return false;
 };

@@ -7,6 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
+
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {AppColors} from '../../../util/AppColors';
@@ -136,6 +137,3 @@ const styles = StyleSheet.create({
     fontWeight: 'semibold',
   }
 });
-function ApiState(ApiState: any) {
-  throw new Error('Function not implemented.');
-}

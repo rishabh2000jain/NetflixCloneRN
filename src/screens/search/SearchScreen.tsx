@@ -148,7 +148,6 @@ const SearchScreen = ({navigation, route}: Props) => {
         />
       </View>
       {showBookmarkModal && (
-
         <BottomSheetModal
           isOpen={showBookmarkModal}
           setIsOpen={setShowBookmarkModal}

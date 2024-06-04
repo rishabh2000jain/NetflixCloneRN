@@ -6,25 +6,25 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from '../../app/Hooks';
-import {getBookmarks} from '../../app/BookmarksReducer';
-import {AppColors} from '../../util/AppColors';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/Hooks';
+import { deleteLibraryThunk, getBookmarks } from '../../app/BookmarksReducer';
+import { AppColors } from '../../util/AppColors';
 import LibraryListItem from '../../components/LibraryListItem';
 import EmptyListComponent from '../search/widgets/EmptyListComponent';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {BottomTabsParamList} from '../../routes/RouteParamList';
-import {View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BottomTabsParamList } from '../../routes/RouteParamList';
+import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { videosListThunk } from '../../app/VideosReducer';
 
 type Props = NativeStackScreenProps<BottomTabsParamList, 'Library'>;
 
-const LibraryScreen = ({navigation, route}: Props) => {
+const LibraryScreen = ({ navigation, route }: Props) => {
   const librarySelector = useAppSelector(state => state.bookmark);
   const dispature = useAppDispatch();
-  const videoSelector = useAppSelector(state=>state.videos.videos);
+  const videoSelector = useAppSelector(state => state.videos.videos);
 
   useEffect(() => {
     if (
@@ -33,8 +33,8 @@ const LibraryScreen = ({navigation, route}: Props) => {
     ) {
       dispature(getBookmarks());
     }
-    if(videoSelector.length == 0){      
-      dispature(videosListThunk({pageNo:1,pageSize:10}));
+    if (videoSelector.length == 0) {
+      dispature(videosListThunk({ pageNo: 1, pageSize: 10 }));
     }
   }, []);
 
@@ -65,21 +65,25 @@ const LibraryScreen = ({navigation, route}: Props) => {
         )}
         {librarySelector.loadBookmarkState == 'success' && (
           <FlatList
-            contentContainerStyle={{marginTop: 20, gap: 9}}
+            contentContainerStyle={{ marginTop: 20, flex: 1 }}
             data={librarySelector.bookmarks}
             ListEmptyComponent={() => {
               return <EmptyListComponent text="No library found!" />;
             }}
-            renderItem={({item}) => {
+            ItemSeparatorComponent={() => {
+              return <View style={{ height: 12 }} />
+            }}
+            renderItem={({ item }) => {
               return (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation
-                      .getParent()
-                      ?.navigate('MoviesList', {id: item.id, name: item.name});
-                  }}>
-                  <LibraryListItem key={item.id} libraryName={item.name} />
-                </TouchableOpacity>
+                <LibraryListItem key={item.id} libraryName={item.name} 
+                onDelete={()=>{
+                  dispature(deleteLibraryThunk(item.id as string));
+                }}
+                onPress={()=>{
+                  navigation
+                  .getParent()
+                  ?.navigate('MoviesList', { id: item.id, name: item.name });
+                }}/>
               );
             }}
           />
